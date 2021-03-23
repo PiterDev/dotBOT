@@ -1,0 +1,4 @@
+List of database keys:
+
+db['server-joins'] = {} - Stores amount of joins in time (dict)
+db['raid-conf'] - Stores configs of servers (dict)
