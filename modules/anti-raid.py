@@ -4,10 +4,7 @@ from discord.utils import get
 import json
 import asyncio
 import os
-from replit import db
-from collections import namedtuple 
 
-info = namedtuple('info', ['joins_req', 'time', 'role', 'enabled'])
 
 
 class AntiRaid(commands.Cog):
@@ -17,46 +14,48 @@ class AntiRaid(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        max_joins = db['raid-conf'][member.guild.id].joins_req
-        
-        if db["raid-conf"][member.guild.id]:
-            if db["raid-conf"][member.guild.id].enabled:
-                with open('server-joins.json', 'r') as f:
-                    joins = json.load(f)
-                joins[str(member.guild.id)] = str(int(joins[str(member.guild.id)])+1)
+        with open('max-server-joins.json', 'r') as f2:
+            max_joins = json.load(f2)
+        if max_joins[str(member.guild.id)][3]:
 
-                with open('server-joins.json', 'w') as f:
-                    json.dump(joins, f, indent=4)
+            with open('server-joins.json', 'r') as f:
+                joins = json.load(f)
+            joins[str(member.guild.id)] = str(int(joins[str(member.guild.id)])+1)
+
+            with open('server-joins.json', 'w') as f:
+                json.dump(joins, f, indent=4)
+
+            
+
+            if int(joins[str(member.guild.id)]) >= int(max_joins[str(member.guild.id)][0]):
+
+                to_wait = int(joins[str(member.guild.id)]) * 5
+                await asyncio.sleep(to_wait)
+                role = get(member.guild.roles, name=max_joins[str(member.guild.id)][2])
+                try:
+                    await member.add_roles(role)
+                except discord.errors.Forbidden:
+                    owner = member.guild.owner 
+
+                    await owner.send("The bot seems to be malfunctioing due to permissions. Check if the bot has administrator permissions and try to put it higher in the role hierachy")
+                in_words = str(to_wait) + " seconds"
+                if to_wait > 60:
+                    to_wait /= 60
+                    in_words = str(to_wait) + " hours"
+                    if to_wait > 24:
+                        to_wait /= 24
+                        in_words = str(to_wait) + " days"
+                
 
                 
 
-                if int(joins[str(member.guild.id)]) >= int(max_joins):
-                    
-                    to_wait = int(joins[str(member.guild.id)]) * 5
-                    in_words = str(to_wait) + " seconds"
-                    if to_wait > 60:
-                        to_wait /= 60
-                        in_words = str(to_wait) + " hours"
-                        if to_wait > 24:
-                            to_wait /= 24
-                            in_words = str(to_wait) + " days"
 
-                    embed=discord.Embed(description=f"Hello! The server is currently crowded. You will be given accesto the server in {in_words}. If you do not, please contact the server admins.", color=0x6af0bd)
+                embed=discord.Embed(description=f"Hello! The server is currently crowded. You will be given accesto the server in {in_words}. If you do not, please contact the server admins.", color=0x6af0bd)
 
-                    await member.send(embed = embed)
-
-                    await asyncio.sleep(to_wait)
-                    role_name = db['raid-conf'][member.guild.id].role
-                    role = get(member.guild.roles, name=role
-                    try:
-                        await member.add_roles(role)
-                    except discord.errors.Forbidden:
-                        owner = member.guild.owner 
-                        await owner.send("The bot seems to be malfunctioing due to permissions. Check if the bot has administrator permissions and try to put it higher in the role hierachy.")
-
-                else:
-                    role = get(member.guild.roles, name='Member')
-                    await member.add_roles(role)
+                await member.send(embed = embed)
+            else:
+                role = get(member.guild.roles, name='Member')
+                await member.add_roles(role)
 
     async def reset_value(self, time: int, server):
 
