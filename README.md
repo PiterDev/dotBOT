@@ -1,5 +1,5 @@
 # dotBOT
-version 1.0
+version 1.1
 
 Hello there!
 I'll add stuff later
