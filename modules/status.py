@@ -11,7 +11,6 @@ class Status(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('[INFO] Module ready: Status')
         await self.client.change_presence(activity=discord.Streaming(name='Powerpoint', url='https://www.youtube.com/channel/UCZQ8GSJlEOuMSvs1IdP2xLg'))
 
 

@@ -6,7 +6,7 @@ import time
 import json
 import os
 
-
+# Unused code
 
 intents = discord.Intents.default()
 intents.members = True
@@ -35,31 +35,31 @@ class ScanMessage(commands.Cog):
 
         return karma[str(message.author.id)]
 
-    @commands.Cog.listener()
-    async def on_guild_join(self, guild):
-        for user in guild.members:
-            with open('karma.json', 'r') as f:
-                karma = json.load(f)
+    # @commands.Cog.listener()
+    # async def on_guild_join(self, guild):
+    #     for user in guild.members:
+    #         with open('karma.json', 'r') as f:
+    #             karma = json.load(f)
 
-            if user.id not in karma:
-                karma[str(user.id)] = 1
-            with open('karma.json', 'w') as f:
-                json.dump(karma, f, indent=4)    
-
-
-
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        with open('karma.json', 'r') as f:
-            karma = json.load(f)
+    #         if user.id not in karma:
+    #             karma[str(user.id)] = 1
+    #         with open('karma.json', 'w') as f:
+    #             json.dump(karma, f, indent=4)    
 
 
 
-        if member.id not in karma:
-            karma[str(member.id)] = 1
+    # @commands.Cog.listener()
+    # async def on_member_join(self, member):
+    #     with open('karma.json', 'r') as f:
+    #         karma = json.load(f)
 
-        with open('karma.json', 'w') as f:
-            json.dump(karma, f, indent=4)
+
+
+    #     if member.id not in karma:
+    #         karma[str(member.id)] = 1
+
+    #     with open('karma.json', 'w') as f:
+    #         json.dump(karma, f, indent=4)
 
 
     # @commands.Cog.listener()

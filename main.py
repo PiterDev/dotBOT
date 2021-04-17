@@ -5,6 +5,7 @@ from discord.ext import commands
 from keep_alive import keep_alive
 from replit import db
 
+
 keys = db.keys()
 for key in keys:
     print(f'{key}:{db[key]}')
@@ -49,15 +50,15 @@ async def unload(ctx, extension):
         await ctx.send("Nope")
 
 
-# @client.event
-# async def on_command_error(ctx, error,):
-#     if isinstance(error, commands.CommandNotFound):
-#         return
-#     if isinstance(error, discord.Forbidden):
-#         ctx.send("Looks like I don't have permissions. This bot requires administrator permissions to work.")
-#     msg = ctx.message.content
-#     (ctx.message.id)
-#     print(f'[WARN] Error encountered: ({error}) message: {msg}')
+@client.event
+async def on_command_error(ctx, error,):
+    if isinstance(error, commands.CommandNotFound):
+        return
+    elif isinstance(error, discord.Forbidden):
+        ctx.send("Looks like I don't have permissions. This bot requires administrator permissions to work.")
+    msg = ctx.message.content
+    (ctx.message.id)
+    print(f'[WARN] Error encountered: ({error}) message: {msg}')
 
 print("Loading modules...")
 time.sleep(1)
@@ -66,4 +67,4 @@ for filename in os.listdir('modules'):
         client.load_extension(f'modules.{filename[:-3]}')
 
 keep_alive()
-client.run(os.getenv('TOKEN'))
+client.run(os.environ['TOKEN'])

@@ -10,11 +10,7 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-        # Events
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print("[INFO] Module ready: Moderation")
 
     @commands.command()
     @commands.has_permissions(kick_members=True)

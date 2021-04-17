@@ -11,6 +11,7 @@ class AntiRaid(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        print("[INFO] Module ready: Anti Raid")
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
@@ -93,7 +94,6 @@ class AntiRaid(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("[INFO] Module ready: Anti Raid")
         for guild in self.client.guilds:
             with open('max-server-joins.json', 'r') as f2:
                 max_joins = json.load(f2)
